@@ -36,6 +36,7 @@
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     transition: var(--transition);
+    max-width: 620px;
 }
 
 .timeline-content:hover {
@@ -54,11 +55,11 @@
 }
 
 .timeline-item:nth-child(odd) .timeline-date {
-    right: -80px;
+    right: 80px;
 }
 
 .timeline-item:nth-child(even) .timeline-date {
-    left: -80px;
+    left: 80px;
 }
 
 .timeline-title {
@@ -96,7 +97,7 @@
     
     .timeline-item:nth-child(odd) .timeline-date,
     .timeline-item:nth-child(even) .timeline-date {
-        left: -80px;
+        left: -30px;
         right: auto;
     }
 }
