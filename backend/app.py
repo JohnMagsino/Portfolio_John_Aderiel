@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from chatbot import generate_response
 import os
 from dotenv import load_dotenv
@@ -8,9 +8,10 @@ load_dotenv()  # Load environment variables
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Needed for session
 
 # Strict prompt engineering to keep responses focused
-SYSTEM_PROMPT = """
+RESUME_PROMPT = """
 You are a professional chatbot representing John Aderiel L. Magsino, an Aspiring Software Engineer and AI/ML enthusiast. Use the following information to answer questions about John:
 
 EXPERIENCE:
@@ -59,6 +60,8 @@ INSTRUCTIONS:
 - Use first person pronouns (I, me, my) when responding.
 """
 
+SHORT_PROMPT_TEMPLATE = "Based on the past conversation saved in your memory, reply to this message: {message}"
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
@@ -68,14 +71,23 @@ def chat():
         if not user_message:
             print('Received empty message')
             return jsonify({'error': 'Empty message'}), 400
-            
-        # Generate response using Gemini
-        response = generate_response(
+        
+        # Use full resume prompt for the first message, then short prompt for subsequent messages
+        if not session.get('has_chatted'):
+            system_prompt = RESUME_PROMPT
+            session['has_chatted'] = True
+        else:
+            system_prompt = SHORT_PROMPT_TEMPLATE.format(message=user_message)
+            # For short prompt, the user message is already in the prompt, so pass empty user_message
+            user_message = ""
+        
+        response_text, token_count = generate_response(
             user_message=user_message,
-            system_prompt=SYSTEM_PROMPT
+            system_prompt=system_prompt
         )
-        print('Gemini response:', response)
-        return jsonify({'response': response})
+        print('Gemini response:', response_text)
+        print('Token count:', token_count)
+        return jsonify({'response': response_text, 'tokens_used': token_count})
         
     except Exception as e:
         print('Error in /api/chat:', str(e))
