@@ -112,6 +112,35 @@
     color: var(--primary);
 }
 
+.github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 8px 18px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+}
+
+.github-btn i {
+    font-size: 1.2rem;
+}
+
+.github-btn:hover {
+    background: var(--secondary);
+    color: #fff;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.15);
+}
+
 @media (max-width: 768px) {
     .projects-container {
         grid-template-columns: 1fr;

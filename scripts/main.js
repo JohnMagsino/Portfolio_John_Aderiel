@@ -73,24 +73,64 @@ function initializeScripts() {
     // Form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        // Create a success message element
+        let successMsg = document.createElement('div');
+        successMsg.className = 'form-success-msg';
+        successMsg.style.display = 'none';
+        successMsg.style.margin = '16px 0';
+        successMsg.style.color = 'var(--primary, #2563eb)';
+        successMsg.style.fontWeight = 'bold';
+        contactForm.parentNode.insertBefore(successMsg, contactForm);
+
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+            // Remove previous error highlights
+            contactForm.querySelectorAll('.form-input').forEach(input => {
+                input.style.borderColor = '';
+            });
+            successMsg.style.display = 'none';
             // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
-            // Simple validation
-            if (!name || !email || !subject || !message) {
-                alert('Please fill in all fields');
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+            let hasError = false;
+            // Simple validation with inline feedback
+            if (!name) {
+                document.getElementById('name').style.borderColor = 'red';
+                hasError = true;
+            }
+            if (!email) {
+                document.getElementById('email').style.borderColor = 'red';
+                hasError = true;
+            }
+            if (!subject) {
+                document.getElementById('subject').style.borderColor = 'red';
+                hasError = true;
+            }
+            if (!message) {
+                document.getElementById('message').style.borderColor = 'red';
+                hasError = true;
+            }
+            if (hasError) {
+                successMsg.style.display = 'block';
+                successMsg.style.color = 'red';
+                successMsg.textContent = 'Please fill in all fields.';
                 return;
             }
-            
-            // In a real application, you would send this data to a server
-            alert(`Thank you ${name}! Your message has been sent. I'll get back to you soon.`);
-            contactForm.reset();
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            // Simulate network request
+            setTimeout(() => {
+                successMsg.style.display = 'block';
+                successMsg.style.color = 'var(--primary, #2563eb)';
+                successMsg.textContent = `Thank you, ${name}! Your message has been sent. I'll get back to you soon.`;
+                contactForm.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }, 1200);
         });
     }
 
