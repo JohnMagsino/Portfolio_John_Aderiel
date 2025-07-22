@@ -127,7 +127,7 @@ function initializeScripts() {
                 successMsg.style.display = 'block';
                 successMsg.style.color = 'var(--primary, #2563eb)';
                 successMsg.textContent = `Thank you, ${name}! Your message has been sent. I'll get back to you soon.`;
-                contactForm.reset();
+            contactForm.reset();
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
             }, 1200);
