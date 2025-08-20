@@ -28,9 +28,18 @@ header.scrolled {
     font-size: 1.8rem;
     color: var(--light);
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.logo span {
+.logo-img {
+    height: 35px;
+    width: auto;
+    border-radius: 8px;
+}
+
+.logo-text span {
     color: var(--primary);
 }
 
